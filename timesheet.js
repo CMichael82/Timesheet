@@ -17,14 +17,13 @@ var startDate = "";
 var monthlyRate = "";
 
 
-
 $("#submit").on("click", function () {
 
 	event.preventDefault();
 
 	$name = $("#empName").val().trim();
 	$role = $("#empRole").val().trim();
-	$startDate = $("#startDate").val().trim();
+	$startDate = moment($("#startDate").val().trim(), "MM/DD/YYYY").format("X");
 	$monthlyRate = $("#monthlyRate").val().trim();
 
 	database.ref().push({
@@ -53,14 +52,16 @@ database.ref().on("child_added", function (snapshot) {
 	var addDate = $("<td>");
 	addDate.text(sv.startDate);
 
+	var months = moment().diff(moment(sv.startDate), "months");
 	var monthsWorked = $("<td>");
-	monthsWorked.text("");
+	monthsWorked.text(months);
 
 	var addRate = $("<td>");
 	addRate.text(sv.monthlyRate);
 
+	var wages = months*sv.monthlyRate;
 	var totalBilled = $("<td>");
-	totalBilled.text("");
+	totalBilled.text(wages);
 
 	var newRow = $("<tr>")
 	newRow.append(addName, addRole, addDate, monthsWorked, addRate, totalBilled);
